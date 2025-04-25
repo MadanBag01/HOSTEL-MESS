@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 20px;
+      width: 500px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+
+    h2, h3, h4 {
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: bold;
+    }
+
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .menu-section {
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Admin Dashboard</h2>
+    <form id="adminDashboardForm" enctype="multipart/form-data">
+      <div class="input-group">
+        <label for="kitchenName">Kitchen Name</label>
+        <input type="text" id="kitchenName" name="kitchenName" placeholder="Enter Kitchen Name" required />
+      </div>
+
+      <div class="input-group">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" placeholder="Enter Address" required></textarea>
+      </div>
+
+      <h3>Meal Timings</h3>
+      <div class="input-group">
+        <label for="addCancelLunchTime">Add/Cancel Before Time (Lunch)</label>
+        <input type="time" id="addCancelLunchTime" name="addCancelLunchTime" required />
+      </div>
+
+      <div class="input-group">
+        <label for="addCancelDinnerTime">Add/Cancel Before Time (Dinner)</label>
+        <input type="time" id="addCancelDinnerTime" name="addCancelDinnerTime" required />
+      </div>
+
+      <div class="input-group">
+        <label for="deliveryLunchTime">Food Reaching Time (Lunch)</label>
+        <input type="time" id="deliveryLunchTime" name="deliveryLunchTime" required />
+      </div>
+
+      <div class="input-group">
+        <label for="deliveryDinnerTime">Food Reaching Time (Dinner)</label>
+        <input type="time" id="deliveryDinnerTime" name="deliveryDinnerTime" required />
+      </div>
+
+      <div class="input-group">
+        <label for="idProof">Upload ID Proof (PDF only)</label>
+        <input type="file" id="idProof" name="idProof" accept="application/pdf" required />
+      </div>
+
+      <h3>Weekly Menu & Pricing</h3>
+      <div id="menuContainer"></div>
+
+      <h3>Subscription Pricing</h3>
+      <div class="input-group">
+        <label for="lunchPrice">Lunch Only (Monthly)</label>
+        <input type="text" id="lunchPrice" name="lunchPrice" placeholder="Enter price for lunch only" required />
+      </div>
+
+      <div class="input-group">
+        <label for="dinnerPrice">Dinner Only (Monthly)</label>
+        <input type="text" id="dinnerPrice" name="dinnerPrice" placeholder="Enter price for dinner only" required />
+      </div>
+
+      <div class="input-group">
+        <label for="bothPrice">Lunch & Dinner (Monthly)</label>
+        <input type="text" id="bothPrice" name="bothPrice" placeholder="Enter price for both meals" required />
+      </div>
+
+      <button type="submit">Save Details</button>
+      <p id="message"></p>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const menuContainer = document.getElementById("menuContainer");
+      const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+      const mealTypes = ["Breakfast", "Lunch", "Dinner"];
+
+      daysOfWeek.forEach(day => {
+        const menuSection = document.createElement("div");
+        menuSection.classList.add("menu-section");
+
+        let menuContent = `<h4>${day}</h4>`;
+        mealTypes.forEach(meal => {
+          menuContent += `
+            <div class="input-group">
+              <label>${meal} Menu</label>
+              <input type="text" id="${day.toLowerCase()}${meal}Menu" name="${day.toLowerCase()}${meal}Menu" placeholder="Enter ${meal} items" required />
+            </div>
+            <div class="input-group">
+              <label>${meal} Price</label>
+              <input type="text" id="${day.toLowerCase()}${meal}Price" name="${day.toLowerCase()}${meal}Price" placeholder="Enter price for ${meal}" required />
+            </div>
+          `;
+        });
+
+        menuSection.innerHTML = menuContent;
+        menuContainer.appendChild(menuSection);
+      });
+    });
+
+    document.getElementById("adminDashboardForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const message = document.getElementById("message");
+      message.innerText = "";
+
+      const form = this;
+      const formData = new FormData(form);
+
+      const idProof = document.getElementById("idProof").files[0];
+      if (!idProof || idProof.type !== "application/pdf") {
+        message.style.color = "red";
+        message.innerText = "Only PDF files are allowed for ID proof.";
+        return;
+      }
+
+      const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+      const mealTypes = ["Breakfast", "Lunch", "Dinner"];
+
+      let menuData = {};
+      for (const day of daysOfWeek) {
+        menuData[day] = {};
+        for (const meal of mealTypes) {
+          const menu = document.getElementById(`${day.toLowerCase()}${meal}Menu`).value.trim();
+          const price = document.getElementById(`${day.toLowerCase()}${meal}Price`).value.trim();
+
+          if (!menu || !price) {
+            message.style.color = "red";
+            message.innerText = `Please enter both menu and price for ${meal} on ${day}.`;
+            return;
+          }
+
+          menuData[day][meal] = { menu, price };
+        }
+      }
+
+      formData.append("menuData", JSON.stringify(menuData));
+
+      fetch("http://localhost:5000/adminRegister", {
+        method: "POST",
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          message.style.color = "green";
+          message.innerText = data.message || "Details saved successfully!";
+          form.reset();
+        })
+        .catch(err => {
+          console.error("Error submitting form:", err);
+          message.style.color = "red";
+          message.innerText = "Something went wrong while saving data.";
+        });
+    });
+  </script>
+</body>
+</html>

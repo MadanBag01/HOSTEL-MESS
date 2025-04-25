@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .bill-section {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .meal-options button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .add-meal { background-color: #28a745; color: white; }
+        .cancel-meal { background-color: #dc3545; color: white; }
+        .extra-meal { background-color: #007bff; color: white; }
+        .bill-details { background-color: #ffc107; color: black; }
+        .pay-bill { background-color: #17a2b8; color: white; }
+        .show-menu { background-color: #6f42c1; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Meal Management</h2>
+        <div class="bill-section">Current Bill Amount: ₹<span id="billAmount">500</span></div>
+        
+        <div class="meal-options">
+            <button class="add-meal" onclick="addMeal()">Add Meal</button>
+            <button class="cancel-meal" onclick="cancelMeal()">Cancel Meal</button>
+            <button class="extra-meal" onclick="addExtraMeal()">Add Extra Meal</button>
+            <button class="bill-details" onclick="showBillDetails()">Show My Bill Details</button>
+            <button class="pay-bill" onclick="payBill()">Pay Bill</button>
+            <button class="show-menu" onclick="showMenu()">Show Menu</button>
+        </div>
+    </div>
+
+    <script>
+        let billAmount = 500; 
+
+        function updateBill() {
+            document.getElementById("billAmount").textContent = billAmount;
+        }
+
+        function addMeal() {
+            billAmount += 100;
+            updateBill();
+        }
+
+        function cancelMeal() {
+            if (billAmount >= 100) {
+                billAmount -= 100;
+                updateBill();
+            }
+        }
+
+        function addExtraMeal() {
+            billAmount += 50;
+            updateBill();
+        }
+
+        function showBillDetails() {
+            alert("Your total bill amount is ₹" + billAmount + "\nBreakdown:\nMeals: ₹" + (billAmount - 50) + "\nExtras: ₹50");
+        }
+
+        function payBill() {
+            alert("Redirecting to payment gateway...\nTotal amount to be paid: ₹" + billAmount);
+        }
+
+        function showMenu() {
+            alert("Today's Menu:\nBreakfast: Poha - ₹50\nLunch: Dal Tadka & Rice - ₹100\nDinner: Paneer Butter Masala & Roti - ₹150");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Mess Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #007bff;
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+        }
+
+        .navbar .left {
+            font-weight: bold;
+        }
+
+        .navbar .center {
+            font-size: 20px;
+        }
+
+        .navbar .right a {
+            text-decoration: none;
+            color: white;
+            margin-left: 15px;
+            padding: 8px 12px;
+            background: #0056b3;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .navbar .right a:hover {
+            background: #003d7a;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            width: 400px;
+            margin: 50px auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .button-group a {
+            text-decoration: none;
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: block;
+        }
+
+        .button-group a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="left">Home</div>
+    
+        <div class="right">
+            <a href="admin-registration.html">Register as Admin</a>
+            <a href="user-registration.html">Register as User</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Welcome to Hostel Mess Management</h2>
+        <div class="button-group">
+            <a href="admin-login.html">Admin Login</a>
+            <a href="user-login.html">User Login</a>
+        </div>
+    </div>
+
+</body>
+</html>

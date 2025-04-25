@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .dashboard {
+            width: 80%;
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .stat-item {
+            background: #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .stat-item:hover {
+            background: #ccc;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h2>Admin Dashboard</h2>
+        <div class="stats">
+            <a href="lunch_orders.html" class="stat-item">Today Total Orders for Lunch: <span id="lunchOrders">50</span></a>
+            <a href="dinner_orders.html" class="stat-item">Today Total Orders for Dinner: <span id="dinnerOrders">40</span></a>
+            <a href="cancelled_orders.html" class="stat-item">Cancelled from Your Side: <span id="cancelledOrders">5</span></a>
+            <a href="total_customers.html" class="stat-item">Total Customers: <span id="totalCustomers">80</span></a>
+            <a href="total_payable.html" class="stat-item">Total Payable Amount: ₹<span id="totalPayable">10000</span></a>
+            <a href="customer_rating.html" class="stat-item">Customer Rating: <span id="customerRating">4.5/5</span></a>
+            <a href="update_menu.html" class="stat-item">Update Menu</a>
+        </div>
+    </div>
+</body>
+</html>
