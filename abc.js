@@ -193,6 +193,35 @@ app.post('/adminRegister', upload.single('idProof'), (req, res) => {
   }
 });
 
+//api key for fetching kitchen details
+app.get('/kitchenDetails/:kitchenId', (req, res) => {
+  const kitchenId = req.params.kitchenId;
+
+  const detailsQuery = `
+    SELECT * FROM kitchen_details WHERE id = ?
+  `;
+  const menuQuery = `
+    SELECT day_of_week, meal_type, menu_items, price
+    FROM weekly_menu
+    WHERE kitchen_id = ?
+  `;
+
+  db.query(detailsQuery, [kitchenId], (err, kitchenResult) => {
+      if (err) return res.status(500).json({ error: 'DB error' });
+      if (kitchenResult.length === 0) return res.status(404).json({ error: 'Kitchen not found' });
+
+      db.query(menuQuery, [kitchenId], (err2, menuResult) => {
+          if (err2) return res.status(500).json({ error: 'Menu fetch error' });
+
+          res.json({
+              kitchen: kitchenResult[0],
+              menu: menuResult
+          });
+      });
+  });
+});
+
+
 // ✅ Start the server
 const PORT = process.env.PORT || 3001;
 const server = app.listen(PORT, () => {

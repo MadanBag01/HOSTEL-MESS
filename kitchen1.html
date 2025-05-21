@@ -1,71 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitchen Menu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        .menu-container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #333;
-        }
-        .menu-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        .combo {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #444;
-        }
-        .provider-info {
-            margin-top: 20px;
-            padding: 10px;
-            background: #eee;
-            border-radius: 8px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Kitchen Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .menu-container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .provider-info {
+      margin-top: 20px;
+      padding: 10px;
+      background: #eee;
+      border-radius: 8px;
+    }
+
+    .combo {
+      margin-top: 20px;
+    }
+
+    .combo .menu-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
 </head>
 <body>
-    <div class="menu-container">
-        <h2 id="kitchenName">Moms Kitchen</h2>
-        
-        <div class="menu-section">
-            <h3>All Day Menu</h3>
-            <div class="menu-item"><span>Breakfast: Poha</span> <span>₹50</span></div>
-            <div class="menu-item"><span>Lunch: Dal Tadka & Rice</span> <span>₹100</span></div>
-            <div class="menu-item"><span>Dinner: Paneer Butter Masala & Roti</span> <span>₹150</span></div>
-        </div>
+  <div class="menu-container">
+    <h2 id="kitchenName">Loading Kitchen...</h2>
 
-        <div class="combo">
-            <h3>Combo Offers</h3>
-            <div class="menu-item"><span>Lunch & Dinner Combo</span> <span>₹200</span></div>
-            <div class="menu-item"><span>Only Lunch Combo</span> <span>₹120</span></div>
-            <div class="menu-item"><span>Only Dinner Combo</span> <span>₹160</span></div>
-        </div>
-
-        <div class="provider-info">
-            <h3>Provider Details</h3>
-            <p><strong>Mobile:</strong> +91 9876543210</p>
-            <p><strong>Lunch Delivery:</strong> 12:30 PM - 1:30 PM</p>
-            <p><strong>Dinner Delivery:</strong> 7:30 PM - 8:30 PM</p>
-        </div>
+    <div id="menuSection">
+      <h3>Weekly Menu</h3>
+      <div id="weeklyMenus"></div>
     </div>
+
+    <div class="combo">
+      <h3>Combo Offers</h3>
+      <div class="menu-item"><span id="lunchCombo"></span> <span id="lunchPrice"></span></div>
+      <div class="menu-item"><span id="dinnerCombo"></span> <span id="dinnerPrice"></span></div>
+      <div class="menu-item"><span id="bothCombo"></span> <span id="bothPrice"></span></div>
+    </div>
+
+    <div class="provider-info">
+      <h3>Provider Details</h3>
+      <p><strong>Mobile:</strong> <span id="mobile">+91 9876543210</span></p>
+      <p><strong>Lunch Delivery:</strong> <span id="lunchTime"></span></p>
+      <p><strong>Dinner Delivery:</strong> <span id="dinnerTime"></span></p>
+    </div>
+  </div>
+
+  <script>
+    const kitchenId = 1;
+
+    fetch(`http://localhost:5000/kitchenDetails/${kitchenId}`)
+      .then(res => res.json())
+      .then(data => {
+        const kitchen = data.kitchen;
+        const menu = data.menu;
+
+        document.getElementById("kitchenName").innerText = kitchen.kitchen_name;
+
+        // Group menu items by day
+        const menuByDay = {};
+        menu.forEach(item => {
+          if (!menuByDay[item.day_of_week]) {
+            menuByDay[item.day_of_week] = [];
+          }
+          menuByDay[item.day_of_week].push(item);
+        });
+
+        const weeklyMenusDiv = document.getElementById("weeklyMenus");
+        const daysOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+        daysOrder.forEach(day => {
+          const items = menuByDay[day];
+          if (!items) return;
+
+          const table = document.createElement("table");
+          const caption = document.createElement("caption");
+          caption.innerText = day;
+          caption.style.fontWeight = 'bold';
+          caption.style.marginBottom = '5px';
+          table.appendChild(caption);
+
+          const thead = document.createElement("thead");
+          thead.innerHTML = "<tr><th>Meal</th><th>Menu</th><th>Price (₹)</th></tr>";
+          table.appendChild(thead);
+
+          const tbody = document.createElement("tbody");
+          items.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td>${item.meal_type}</td><td>${item.menu_items}</td><td>${item.price}</td>`;
+            tbody.appendChild(row);
+          });
+
+          table.appendChild(tbody);
+          weeklyMenusDiv.appendChild(table);
+        });
+
+        // Combo Prices
+        document.getElementById("lunchCombo").innerText = "Only Lunch Combo";
+        document.getElementById("lunchPrice").innerText = `₹${kitchen.lunch_price}`;
+
+        document.getElementById("dinnerCombo").innerText = "Only Dinner Combo";
+        document.getElementById("dinnerPrice").innerText = `₹${kitchen.dinner_price}`;
+
+        document.getElementById("bothCombo").innerText = "Lunch & Dinner Combo";
+        document.getElementById("bothPrice").innerText = `₹${kitchen.both_price}`;
+
+        // Provider Times
+        document.getElementById("lunchTime").innerText = kitchen.delivery_lunch_time;
+        document.getElementById("dinnerTime").innerText = kitchen.delivery_dinner_time;
+      })
+      .catch(err => {
+        console.error("Error loading menu:", err);
+        document.getElementById("kitchenName").innerText = "Error loading kitchen data!";
+      });
+  </script>
 </body>
 </html>
