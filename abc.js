@@ -193,6 +193,30 @@ app.post('/adminRegister', upload.single('idProof'), (req, res) => {
   }
 });
 
+//adding kitchen in menu
+app.get("/kitchenlist", (req, res) => {
+    db.query("SELECT id, kitchen_name FROM kitchen_details", (err, results) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: "Failed to fetch kitchens" });
+        }
+        res.json(results);
+    });
+});
+
+// ROUTE: Get kitchen details by ID
+// app.get("/kitchenDetails/:id", (req, res) => {
+//     const id = req.params.id;
+//     db.query("SELECT * FROM kitchen_details WHERE id = ?", [id], (err, results) => {
+//         if (err || results.length === 0) {
+//             return res.status(404).json({ error: "Kitchen not found" });
+//         }
+//         res.json(results[0]);
+//     });
+// });
+
+//done
+
 //api key for fetching kitchen details
 app.get('/kitchenDetails/:kitchenId', (req, res) => {
   const kitchenId = req.params.kitchenId;
