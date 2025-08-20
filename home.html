@@ -1,101 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hostel Mess Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hostel Mess Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+    }
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #007bff;
-            color: white;
-            padding: 15px 20px;
-            font-size: 18px;
-        }
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #007bff;
+      color: white;
+      padding: 15px 20px;
+      font-size: 18px;
+    }
 
-        .navbar .left {
-            font-weight: bold;
-        }
+    .navbar .logo {
+      font-weight: bold;
+      font-size: 22px;
+    }
 
-        .navbar .center {
-            font-size: 20px;
-        }
+    .navbar .menu a {
+      text-decoration: none;
+      color: white;
+      margin-left: 20px;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
 
-        .navbar .right a {
-            text-decoration: none;
-            color: white;
-            margin-left: 15px;
-            padding: 8px 12px;
-            background: #0056b3;
-            border-radius: 5px;
-            font-size: 14px;
-        }
+    .navbar .menu a:hover {
+      color: #ffdd57;
+    }
 
-        .navbar .right a:hover {
-            background: #003d7a;
-        }
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(to right, #007bff, #0056b3);
+      color: white;
+    }
 
-        .container {
-            background: #fff;
-            padding: 20px;
-            width: 400px;
-            margin: 50px auto;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            text-align: center;
-        }
+    .hero h1 {
+      font-size: 40px;
+      margin-bottom: 15px;
+    }
 
-        h2 {
-            margin-bottom: 20px;
-        }
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
 
-        .button-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    .hero .cta {
+      padding: 12px 25px;
+      background: #ffdd57;
+      color: black;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        .button-group a {
-            text-decoration: none;
-            background: #007bff;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 16px;
-            display: block;
-        }
+    .hero .cta:hover {
+      background: #e6c74b;
+    }
 
-        .button-group a:hover {
-            background: #0056b3;
-        }
-    </style>
+    /* Features Section */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 40px;
+      background: #fff;
+    }
+
+    .feature-card {
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+
+    /* About/Help Section */
+    .about {
+      padding: 50px 20px;
+      background: #eef2f7;
+      text-align: center;
+    }
+
+    .about h2 {
+      margin-bottom: 15px;
+    }
+
+    .about p {
+      max-width: 700px;
+      margin: auto;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    /* Login/Register Section */
+    .auth {
+      text-align: center;
+      padding: 40px 20px;
+      background: #fff;
+    }
+
+    .auth h2 {
+      margin-bottom: 20px;
+    }
+
+    .auth .button-group a {
+      text-decoration: none;
+      background: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 5px;
+      margin: 10px;
+      display: inline-block;
+      font-size: 16px;
+    }
+
+    .auth .button-group a:hover {
+      background: #0056b3;
+    }
+
+    /* Footer */
+    .footer {
+      background: #007bff;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .footer a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .footer a:hover {
+      color: #ffdd57;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="left">Home</div>
-    
-        <div class="right">
-            <a href="admin-registration.html">Register as Admin</a>
-            <a href="user-registration.html">Register as User</a>
-        </div>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">Mess Management</div>
+    <div class="menu">
+      <a href="#">Home</a>
+      <a href="#about">About</a>
+      <a href="/help.html">Help</a>
+      <a href="#contact">Contact</a>
+      <a href="#login">Login</a>
+      <a href="#register">Register</a>
     </div>
+  </div>
 
-    <div class="container">
-        <h2>Welcome to Hostel Mess Management</h2>
-        <div class="button-group">
-            <a href="admin-login.html">Admin Login</a>
-            <a href="user-login.html">User Login</a>
-        </div>
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Welcome to Hostel Mess Management</h1>
+    <p>Smart, Easy & Automated Solution for Hostel Meals</p>
+    <a href="#register" class="cta">Get Started</a>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feature-card">
+      <h3>Meal Preferences</h3>
+      <p>Choose your meals according to your choice ,you can add ,cancel or add extra without contact with providers.</p>
     </div>
+    <div class="feature-card">
+      <h3>Lots of available Kitchens</h3>
+      <p>Navigate through kitchens and subscribe according to your preference.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Automated Billing</h3>
+      <p>No worries! Get automatic bill generation at the end of the month.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Easy Access</h3>
+      <p>Simple login for both Admins and Users for quick access.</p>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="about" id="about">
+    <h2>About Our Project</h2>
+    <p>
+      The Hostel Mess Management system is designed to simplify the process of meal management for both students and providers. 
+      It ensures transparency, reduces manual work, and makes hostel life easier with automated processes.
+    </p>
+  </div>
+
+  <!-- Login/Register Section -->
+  <div class="auth" id="login">
+    <h2>Login / Register</h2>
+    <div class="button-group">
+      <a href="admin-login.html">Admin Login</a>
+      <a href="user-login.html">User Login</a>
+      <a href="admin-registration.html" id="register">Register as Admin</a>
+      <a href="user-registration.html">Register as User</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer" id="contact">
+    <p>Follow us on</p>
+    <a href="https://instagram.com" target="_blank">📷</a>
+    <a href="https://linkedin.com" target="_blank">💼</a>
+    <a href="mailto:contact@messmanagement.com">✉️</a>
+    <p>&copy; 2025 Hostel Mess Management. All Rights Reserved.</p>
+  </div>
 
 </body>
 </html>

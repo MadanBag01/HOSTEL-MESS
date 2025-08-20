@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Portal - Hostel Mess Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 20px;
+      width: 420px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .input-group label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #message, #dashboardMessage {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .switch-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .switch-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .switch-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- User Registration -->
+    <div id="registrationSection">
+      <h2>User Registration</h2>
+      <form id="userForm">
+        <div class="input-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Enter full name">
+        </div>
+
+        <div class="input-group">
+          <label for="mobile">Mobile Number</label>
+          <input type="text" id="mobile" name="mobile" placeholder="Enter mobile number">
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter email">
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter password">
+        </div>
+
+        <button type="submit">Register</button>
+        <p id="message"></p>
+      </form>
+
+      <div class="switch-link">
+        <p>Already registered? <a href="#" onclick="switchSection('dashboard')">Go to Dashboard</a></p>
+      </div>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="dashboardSection" class="hidden">
+      <h2>User Dashboard</h2>
+      <form id="userDashboardForm">
+        <div class="input-group">
+          <label for="idProof">Upload ID Proof (PDF or JPG)</label>
+          <input type="file" id="idProof" name="idProof" accept=".pdf, .jpg, .jpeg">
+        </div>
+
+        <!-- Updated Address Fields -->
+        <div class="input-group">
+          <label for="flatNo">Flat No.</label>
+          <input type="text" id="flatNo" name="flatNo" placeholder="Ex: A-203">
+        </div>
+
+        <div class="input-group">
+          <label for="area">Area</label>
+          <input type="text" id="area" name="area" placeholder="Ex: MG Road">
+        </div>
+
+        <div class="input-group">
+          <label for="landmark">Nearby Landmark</label>
+          <input type="text" id="landmark" name="landmark" placeholder="Ex: Near City Mall">
+        </div>
+
+        <div class="input-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="Ex: Bangalore">
+        </div>
+
+        <div class="input-group">
+          <label for="state">State</label>
+          <input type="text" id="state" name="state" placeholder="Ex: Karnataka">
+        </div>
+
+        <div class="input-group">
+          <label for="pincode">Pin Code</label>
+          <input type="text" id="pincode" name="pincode" placeholder="Ex: 560001">
+        </div>
+
+        <button type="submit">Save Details</button>
+        <p id="dashboardMessage"></p>
+      </form>
+
+      <div class="switch-link">
+        <p>Not registered yet? <a href="#" onclick="switchSection('registration')">Go to Registration</a></p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+  let fullName = "";
+  let mobile = "";
+  let email = "";
+  let password = "";
+
+  // Section toggle
+  function switchSection(section) {
+    document.getElementById("registrationSection").classList.add("hidden");
+    document.getElementById("dashboardSection").classList.add("hidden");
+
+    if (section === "registration") {
+      document.getElementById("registrationSection").classList.remove("hidden");
+    } else {
+      document.getElementById("dashboardSection").classList.remove("hidden");
+    }
+  }
+
+  // Registration form validation
+  document.getElementById("userForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    fullName = document.getElementById("fullName").value.trim();
+    mobile = document.getElementById("mobile").value.trim();
+    email = document.getElementById("email").value.trim();
+    password = document.getElementById("password").value.trim();
+    let message = document.getElementById("message");
+
+    if (!fullName || !mobile || !email || !password) {
+      message.style.color = "red";
+      message.innerText = "All fields are required!";
+      return;
+    }
+
+    if (!/^\d{10}$/.test(mobile)) {
+      message.style.color = "red";
+      message.innerText = "Enter a valid 10-digit mobile number.";
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      message.style.color = "red";
+      message.innerText = "Enter a valid email address.";
+      return;
+    }
+
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password)) {
+      message.style.color = "red";
+      message.innerText = "Password must be at least 6 characters and include 1 uppercase, 1 lowercase, 1 digit, and 1 special character.";
+      return;
+    }
+
+    message.style.color = "green";
+    message.innerText = "Registration successful!";
+    switchSection('dashboard');
+  });
+
+  // Dashboard form validation
+  document.getElementById("userDashboardForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let idProof = document.getElementById("idProof").files[0];
+    let flatNo = document.getElementById("flatNo").value.trim();
+    let area = document.getElementById("area").value.trim();
+    let landmark = document.getElementById("landmark").value.trim();
+    let city = document.getElementById("city").value.trim();
+    let state = document.getElementById("state").value.trim();
+    let pincode = document.getElementById("pincode").value.trim();
+    let message = document.getElementById("dashboardMessage");
+
+    if (!idProof || !flatNo || !area || !city || !state || !pincode) {
+      message.style.color = "red";
+      message.innerText = "All required fields must be filled!";
+      return;
+    }
+
+    let fileType = idProof.type;
+    if (fileType !== "application/pdf" && fileType !== "image/jpeg") {
+      message.style.color = "red";
+      message.innerText = "Only PDF or JPG files are allowed!";
+      return;
+    }
+
+    let formData = new FormData();
+    formData.append("full_name", fullName);
+    formData.append("email", email);
+    formData.append("phone", mobile);
+    formData.append("password", password);
+
+    formData.append("flat_no", flatNo || "");
+    formData.append("area", area);
+    formData.append("nearby_landmark", landmark || "");
+    formData.append("city", city);
+    formData.append("state", state);
+    formData.append("pincode", pincode);
+
+    // ✅ Send actual file instead of just name
+    formData.append("id_proof", idProof);
+
+    // Dashboard form validation (inside fetch)
+fetch("http://localhost:3001/newUserRegister", {
+  method: "POST",
+  body: formData
+})
+.then(response => response.json())
+.then(data => {
+  console.log("Server Response:", data);
+
+  if (data && data.message) {
+    if (data.message.toLowerCase().includes("already exists")) {
+      message.style.color = "red";
+    } else {
+      message.style.color = "green";
+    }
+    message.innerText = data.message;
+     setTimeout(() => {
+    message.innerText="" ;
+  }, 60000);
+  } else {
+    message.style.color = "green";
+    message.innerText = "Details submitted successfully!";
+  }
+
+  // Clear message after 60s
+ 
+})
+.catch(error => {
+  console.error("Error submitting form:", error);
+  message.style.color = "red";
+  message.innerText = "Something went wrong. Please try again.";
+  
+});
+
+});
+</script>
+
+</body>
+</html>

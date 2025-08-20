@@ -1,125 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-        .container {
-            background: #fff;
-            padding: 20px;
-            width: 350px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
+    .container {
+      background: #fff;
+      padding: 25px;
+      width: 350px;
+      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+    }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
 
-        .input-group {
-            margin-bottom: 15px;
-        }
+    .input-group {
+      margin-bottom: 15px;
+    }
 
-        .input-group label {
-            display: block;
-            font-weight: bold;
-        }
+    .input-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
 
-        .input-group input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
 
-        button {
-            width: 100%;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+    button {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+    button:hover {
+      background-color: #0056b3;
+    }
 
-        #message {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-    </style>
+    #message {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .register-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>User Login</h2>
-        <form id="userLoginForm">
-            <div class="input-group">
-                <label for="identifier">Email or Mobile Number</label>
-                <input type="text" id="identifier" name="identifier" placeholder="Enter email or mobile number">
-            </div>
+  <div class="container">
+    <h2>User Login</h2>
+    <form id="userLoginForm">
+      <div class="input-group">
+        <label for="identifier">Email or Mobile Number</label>
+        <input type="text" id="identifier" name="identifier" placeholder="Enter email or mobile number">
+      </div>
 
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter password">
-            </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password">
+      </div>
 
-            <button type="submit">Login</button>
+      <button type="submit">Login</button>
+      <p id="message"></p>
+    </form>
 
-            <p id="message"></p>
-        </form>
+    <div class="register-link">
+      Don’t have an account? <a href="newUserRegister.html">Register here</a>
     </div>
+  </div>
 
-    <script>
-        document.getElementById("userLoginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
+  <script>
+    document.getElementById("userLoginForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
 
-            let identifier = document.getElementById("identifier").value.trim();
-            let password = document.getElementById("password").value.trim();
-            let message = document.getElementById("message");
+      let identifier = document.getElementById("identifier").value.trim();
+      let password = document.getElementById("password").value.trim();
+      let message = document.getElementById("message");
 
-            // Validation checks
-            if (!identifier || !password) {
-                message.style.color = "red";
-                message.innerText = "All fields are required!";
-                return;
-            }
+      // Basic validation
+      if (!identifier || !password) {
+        message.style.color = "red";
+        message.innerText = "All fields are required!";
+        return;
+      }
 
-            if (!/^\d{10}$/.test(identifier) && !/\S+@\S+\.\S+/.test(identifier)) {
-                message.style.color = "red";
-                message.innerText = "Enter a valid email or 10-digit mobile number.";
-                return;
-            }
+      if (!/^\d{10}$/.test(identifier) && !/\S+@\S+\.\S+/.test(identifier)) {
+        message.style.color = "red";
+        message.innerText = "Enter a valid email or 10-digit mobile number.";
+        return;
+      }
 
-            if (password.length < 6) {
-                message.style.color = "red";
-                message.innerText = "Password must be at least 6 characters.";
-                return;
-            }
+      if (password.length < 6) {
+        message.style.color = "red";
+        message.innerText = "Password must be at least 6 characters.";
+        return;
+      }
 
-            message.style.color = "green";
-            message.innerText = "Login successful!";
-            
-            // TODO: Send login data to backend (using fetch API or AJAX)
+      try {
+        let response = await fetch("http://localhost:3001/user_login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ identifier, password })
         });
-    </script>
+
+        let data = await response.json();
+
+        if (data.success) {
+          message.style.color = "green";
+          message.innerText = data.message;
+          // Redirect to menu page
+          setTimeout(() => {
+            window.location.href = "kitchenlist.html";
+          }, 1000);
+        } else {
+          message.style.color = "red";
+          message.innerText = data.message;
+        }
+      } catch (err) {
+        message.style.color = "red";
+        message.innerText = "Error connecting to server!";
+        console.error(err);
+      }
+    });
+  </script>
 
 </body>
 </html>

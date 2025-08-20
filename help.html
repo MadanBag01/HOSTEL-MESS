@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help - Hostel Mess Management</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #007bff;
+      color: white;
+      padding: 15px 20px;
+      font-size: 18px;
+    }
+
+    .navbar .logo {
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .navbar .menu a {
+      text-decoration: none;
+      color: white;
+      margin-left: 20px;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .navbar .menu a:hover {
+      color: #ffdd57;
+    }
+
+    /* Main Section */
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007bff;
+    }
+
+    /* Form */
+    .grievance-form {
+      margin-bottom: 30px;
+    }
+
+    .grievance-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .grievance-form textarea,
+    .grievance-form input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .grievance-form button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .grievance-form button:hover {
+      background: #0056b3;
+    }
+
+    /* Emergency Section */
+    .emergency {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      background: #eef2f7;
+      border-radius: 8px;
+    }
+
+    .emergency h3 {
+      color: #d9534f;
+      margin-bottom: 10px;
+    }
+
+    .emergency p {
+      font-size: 18px;
+      margin: 5px 0;
+    }
+
+    /* Footer */
+    .footer {
+      background: #007bff;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    .footer a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 20px;
+    }
+
+    .footer a:hover {
+      color: #ffdd57;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+  <div class="logo">Mess Management</div>
+  <div class="menu">
+    <a href="home.html">Home</a>
+    <a href="home.html#about">About</a>
+    <a href="help.html">Help</a>
+    <a href="home.html#contact">Contact</a>
+    <a href="home.html#login">Login</a>
+  </div>
+</div>
+
+  <!-- Container -->
+  <div class="container">
+    <h2>Need Help?</h2>
+
+    <!-- Grievance Form -->
+    <div class="grievance-form">
+      <form>
+        <label for="grievance">Upload Your Grievance:</label>
+        <textarea id="grievance" rows="5" placeholder="Write your issue here..."></textarea>
+        
+        <label for="file">Attach Supporting File (Optional):</label>
+        <input type="file" id="file">
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <p style="text-align:center; font-size:16px; color: #333;">
+      ✅ Our team will contact you soon after reviewing your grievance.
+    </p>
+
+    <!-- Emergency Contact -->
+    <div class="emergency">
+      <h3>🚨 Emergency Contact</h3>
+      <p>📞 Mess Office: +91 98765 43210</p>
+      <p>📞 Warden: +91 91234 56789</p>
+      <p>📧 Email: support@messmanagement.com</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Follow us on</p>
+    <a href="https://instagram.com" target="_blank">📷</a>
+    <a href="https://linkedin.com" target="_blank">💼</a>
+    <a href="mailto:contact@messmanagement.com">✉️</a>
+    <p>&copy; 2025 Hostel Mess Management. All Rights Reserved.</p>
+  </div>
+
+</body>
+</html>
