@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            font-weight: bold;
+            display: block;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>User Dashboard</h2>
+        <form id="userDashboardForm">
+            <div class="input-group">
+                <label for="idProof">Upload ID Proof (PDF or JPG)</label>
+                <input type="file" id="idProof" name="idProof" accept=".pdf, .jpg, .jpeg">
+            </div>
+
+            <div class="input-group">
+                <label for="address">Current Address (for delivery)</label>
+                <textarea id="address" name="address" placeholder="Enter your current address"></textarea>
+            </div>
+
+            <button type="submit">Save Details</button>
+            <p id="message"></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("userDashboardForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let idProof = document.getElementById("idProof").files[0];
+            let address = document.getElementById("address").value.trim();
+            let message = document.getElementById("message");
+
+            if (!idProof || !address) {
+                message.style.color = "red";
+                message.innerText = "All fields are required!";
+                return;
+            }
+
+            let fileType = idProof.type;
+            if (fileType !== "application/pdf" && fileType !== "image/jpeg") {
+                message.style.color = "red";
+                message.innerText = "Only PDF or JPG files are allowed!";
+                return;
+            }
+            let formData = new FormData();
+            formData.append("idProof", idProof);
+            formData.append("address", address);
+
+         fetch("http://localhost:5002/userRegister", {
+             method: "POST",
+             body: formData
+            })
+        .then(response => response.json())
+        .then(data => {
+          message.style.color = "green";
+         message.innerText = data.message || "Details submitted!";
+        })
+        .catch(error => {
+         console.error("Error submitting form:", error);
+         message.style.color = "red";
+         message.innerText = "Something went wrong.";
+        });
+
+
+            message.style.color = "green";
+            message.innerText = "Details saved successfully!";
+            
+            // TODO: Send file and address data to backend (Spring Boot + MySQL)
+        });
+    </script>
+
+</body>
+</html>

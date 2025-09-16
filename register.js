@@ -23,14 +23,14 @@ app.use(express.urlencoded({ extended: true }));
 const session = require("express-session");
 
 app.use(session({
-    secret: "Madan1254&",   // change this to a strong random string
+    secret: "Madan1254&",   
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }   // set secure: true if using HTTPS
+    cookie: { secure: false }  
 }));
 
 
-// ✅ Serve static files
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MySQL Connection
@@ -50,7 +50,7 @@ db.connect((err) => {
 });
 
 
-// Use multer middleware for single file upload
+
 const upload = multer({ dest: "uploads/" });
 
 // ================= REGISTER USER =================
@@ -79,7 +79,7 @@ app.post("/newUserRegister", upload.single("id_proof"), async (req, res) => {
       return res.status(400).json({ error: "All required fields must be filled!" });
     }
 
-    // ✅ Step 1: Check if email OR phone already exists
+    //  Check if email OR phone already exists
     const checkSql = `SELECT * FROM user_register_data WHERE email = ? OR phone = ?`;
     db.query(checkSql, [email, phone], async (err, results) => {
       if (err) {
@@ -91,10 +91,10 @@ app.post("/newUserRegister", upload.single("id_proof"), async (req, res) => {
       return res.status(400).json({ message: "User with this email or phone already exists!" });
     }
 
-      // ✅ Step 2: Hash password
+      // Hash password
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // ✅ Step 3: Insert new user
+      // Insert new user
       const insertSql = `
         INSERT INTO user_register_data 
         (full_name, email, phone, flat_no, area, nearby_landmark, city, state, pincode, id_proof_filename, password, status) 
@@ -112,7 +112,7 @@ app.post("/newUserRegister", upload.single("id_proof"), async (req, res) => {
 
           const userId = result.insertId;
 
-          // ✅ Send verification email
+          // Send verification email
           const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -243,7 +243,7 @@ app.post("/user_login", (req, res) => {
     return res.status(400).json({ success: false, message: "All fields are required" });
   }
 
-  // Check whether identifier is email or mobile
+  // whether identifier is email or mobile
   let query = "";
   if (/^\d{10}$/.test(identifier)) {
     query = "SELECT * FROM user_register_data WHERE mobile = ?";
@@ -284,6 +284,156 @@ app.post("/user_login", (req, res) => {
     });
   });
 });
+
+// For the provider
+// Route: Admin Registration
+app.post("/newProviderRegister", upload.single("idProof"), async (req, res) => {
+  try {
+    const {
+      fullName,
+      mobile,
+      email,
+      password,
+      kitchenName,
+      address,
+      addCancelLunchTime,
+      addCancelDinnerTime,
+      deliveryLunchTime,
+      deliveryDinnerTime,
+      lunchPrice,
+      dinnerPrice,
+      bothPrice,
+      menuData
+    } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ message: "ID Proof (PDF) is required" });
+    }
+
+    // ✅ Hash the password before storing
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert into admin table
+    const insertAdmin = `INSERT INTO admin (fullName, mobile, email, password) VALUES (?, ?, ?, ?)`;
+    db.query(insertAdmin, [fullName, mobile, email, hashedPassword], (err, adminResult) => {
+      if (err) {
+        console.error("Error inserting admin:", err);
+        return res.status(500).json({ message: "Admin registration failed" });
+      }
+
+      const adminId = adminResult.insertId;
+
+      // Insert into admin_details table
+      const insertDetails = `
+        INSERT INTO admin_details 
+        (admin_id, kitchenName, address, addCancelLunchTime, addCancelDinnerTime, deliveryLunchTime, deliveryDinnerTime, idProofPath, lunchPrice, dinnerPrice, bothPrice) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      db.query(
+        insertDetails,
+        [
+          adminId,
+          kitchenName,
+          address,
+          addCancelLunchTime,
+          addCancelDinnerTime,
+          deliveryLunchTime,
+          deliveryDinnerTime,
+          req.file.path,
+          lunchPrice,
+          dinnerPrice,
+          bothPrice,
+        ],
+        (err, detailsResult) => {
+          if (err) {
+            console.error("Error inserting details:", err);
+            return res.status(500).json({ message: "Failed to save dashboard details" });
+          }
+
+          const detailsId = detailsResult.insertId;
+          let menuJson;
+
+          try {
+            menuJson = JSON.parse(menuData);
+          } catch (e) {
+            console.error("Menu parsing error:", e);
+            return res.status(400).json({ message: "Invalid menu data format" });
+          }
+
+          // Prepare weekly menu insertion
+          const insertMenu = `INSERT INTO weekly_menu2 (admin_details_id, dayOfWeek, mealType, menuItems, price) VALUES ?`;
+          const values = [];
+
+          for (const day in menuJson) {
+            for (const meal in menuJson[day]) {
+              values.push([
+                detailsId,
+                day,
+                meal,
+                menuJson[day][meal].menu,
+                menuJson[day][meal].price,
+              ]);
+            }
+          }
+
+          if (values.length === 0) {
+            return res.status(400).json({ message: "Weekly menu data is empty" });
+          }
+
+          db.query(insertMenu, [values], (err) => {
+            if (err) {
+              console.error("Error inserting menu:", err);
+              return res.status(500).json({ message: "Failed to save weekly menu" });
+            }
+
+            return res.json({
+              message: "✅ Admin registration and details saved successfully!",
+              adminId,
+              detailsId,
+            });
+          });
+        }
+      );
+    });
+  } catch (err) {
+    console.error("Unexpected error:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+//login admin
+const bcrypt = require("bcrypt");
+
+// POST login route
+app.post("/admin_login", (req, res) => {
+  const { identifier, password } = req.body;
+
+  // Step 1: Fetch admin row by email or mobile
+  const sql = `SELECT * FROM admin WHERE email = ? OR mobile = ? LIMIT 1`;
+
+  db.query(sql, [identifier, identifier], async (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    if (results.length === 0) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const admin = results[0];
+
+    // Step 2: Compare hash
+    const match = await bcrypt.compare(password, admin.password);
+
+    if (match) {
+      res.json({ message: "Login successful", admin });
+    } else {
+      res.status(401).json({ message: "Invalid credentials" });
+    }
+  });
+});
+
 
 
 

@@ -102,42 +102,50 @@
 
       <!-- Sign Up link -->
       <div class="signup-text">
-        Not registered? <a href="signup.html">Sign Up</a>
+        Not registered? <a href="newProviderRegister.html">Sign Up</a>
       </div>
     </form>
   </div>
 
   <script>
-    document.getElementById("adminLoginForm").addEventListener("submit", function(event) {
+    document.getElementById("adminLoginForm").addEventListener("submit", async function(event) {
       event.preventDefault();
 
       let identifier = document.getElementById("identifier").value.trim();
       let password = document.getElementById("password").value.trim();
       let message = document.getElementById("message");
 
-      // Validation checks
       if (!identifier || !password) {
         message.style.color = "red";
         message.innerText = "All fields are required!";
         return;
       }
 
-      if (!/^\d{10}$/.test(identifier) && !/\S+@\S+\.\S+/.test(identifier)) {
-        message.style.color = "red";
-        message.innerText = "Enter a valid email or 10-digit mobile number.";
-        return;
-      }
+      try {
+        const res = await fetch("http://localhost:3001/admin_login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ identifier, password })
+        });
 
-      if (password.length < 6) {
-        message.style.color = "red";
-        message.innerText = "Password must be at least 6 characters.";
-        return;
-      }
+        const data = await res.json();
 
-      message.style.color = "green";
-      message.innerText = "Login successful!";
-      
-      // TODO: Send login data to backend (using fetch API or AJAX)
+        if (res.ok) {
+          message.style.color = "green";
+          message.innerText = data.message;
+
+          // redirect to dashboard
+          setTimeout(() => {
+            window.location.href = "dashboard.html";
+          }, 1000);
+        } else {
+          message.style.color = "red";
+          message.innerText = data.message;
+        }
+      } catch (error) {
+        message.style.color = "red";
+        message.innerText = "Server error!";
+      }
     });
   </script>
 
